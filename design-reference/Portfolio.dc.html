@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{ margin:0; background:oklch(0.972 0.006 95); color:oklch(0.21 0.012 95); -webkit-font-smoothing:antialiased; }
+  a{ color:oklch(0.21 0.012 95); text-decoration:none; }
+  a:hover{ color:oklch(0.52 0.13 145); }
+  ::selection{ background:oklch(0.88 0.12 145); }
+  @keyframes rise{ from{ opacity:0; transform:translateY(16px);} to{ opacity:1; transform:none;} }
+</style>
+</helmet>
+
+<div style="font-family:'Bricolage Grotesque',system-ui,sans-serif; max-width:1140px; margin:0 auto; padding:0 clamp(20px,5vw,56px) 140px;">
+
+  <header style="position:sticky; top:0; z-index:9; display:flex; justify-content:space-between; align-items:baseline; gap:24px; padding:26px 0 22px; background:oklch(0.972 0.006 95 / 0.92); backdrop-filter:blur(8px); font-family:'Geist Mono',ui-monospace,monospace; font-size:11.5px; letter-spacing:0.1em; text-transform:uppercase;">
+    <a href="#top" style="font-weight:500;">Dominik Leimgruber</a>
+    <nav style="display:flex; gap:clamp(14px,2.4vw,30px); flex-wrap:wrap; justify-content:flex-end;">
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#education">Education</a>
+      <a href="#languages">Languages</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section id="top" style="padding:clamp(70px,11vw,130px) 0 clamp(70px,9vw,110px); animation:rise .7s ease both;">
+    <div style="display:flex; align-items:center; gap:10px; font-family:'Geist Mono',ui-monospace,monospace; font-size:11.5px; letter-spacing:0.1em; text-transform:uppercase; color:oklch(0.45 0.02 95); margin-bottom:clamp(28px,4vw,44px);">
+      <span style="width:7px; height:7px; border-radius:50%; background:oklch(0.72 0.16 145);"></span>
+      <span>Open to software &amp; solutions engineering roles</span>
+    </div>
+    <h1 style="font-size:clamp(38px,6.6vw,86px); line-height:1.0; letter-spacing:-0.032em; font-weight:400; margin:0; max-width:960px; text-wrap:balance;">DevOps and platform engineer building the AWS foundation that 2'000+ accounts run on.</h1>
+    <p style="font-size:clamp(17px,1.5vw,20px); line-height:1.6; max-width:640px; margin:clamp(30px,4vw,46px) 0 0; color:oklch(0.36 0.015 95); text-wrap:pretty;">Five years across cloud platform engineering, security operations and software development — infrastructure as code, serverless services, and agentic tooling that removes recurring work. Based in Zürich, working in German and English.</p>
+    <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:clamp(32px,4vw,46px); font-family:'Geist Mono',ui-monospace,monospace; font-size:12.5px;">
+      <a href="https://github.com/dominik.leimgruber" style="padding:12px 20px; background:oklch(0.21 0.012 95); color:oklch(0.972 0.006 95); border-radius:2px; transition:background .18s ease;" style-hover="background:oklch(0.44 0.13 145);">GitHub</a>
+      <a href="https://linkedin.com/in/dominik.leimgruber" style="padding:12px 20px; border:1px solid oklch(0.84 0.012 95); border-radius:2px; transition:border-color .18s ease;" style-hover="border-color:oklch(0.21 0.012 95);">LinkedIn</a>
+    </div>
+  </section>
+
+  <section id="experience" style="padding:clamp(56px,7vw,88px) 0 0; border-top:1px solid oklch(0.89 0.008 95);">
+    <div style="font-family:'Geist Mono',ui-monospace,monospace; font-size:11.5px; letter-spacing:0.1em; text-transform:uppercase; color:oklch(0.45 0.02 95); padding-top:24px; margin-bottom:clamp(36px,5vw,60px);">Experience</div>
+    <div style="display:flex; flex-direction:column; gap:clamp(48px,6vw,76px);">
+      <sc-for list="{{ jobs }}" as="job" hint-placeholder-count="3">
+        <article style="display:grid; grid-template-columns:minmax(150px,0.42fr) minmax(0,1fr); gap:clamp(16px,3vw,48px);">
+          <div>
+            <div style="font-size:clamp(22px,2.2vw,28px); line-height:1.15; letter-spacing:-0.02em; font-weight:500;">{{ job.company }}</div>
+            <div style="font-family:'Geist Mono',ui-monospace,monospace; font-size:11.5px; letter-spacing:0.06em; text-transform:uppercase; color:oklch(0.5 0.13 145); margin-top:10px;">{{ job.role }}</div>
+            <div style="font-family:'Geist Mono',ui-monospace,monospace; font-size:11.5px; color:oklch(0.5 0.02 95); margin-top:8px; line-height:1.6;">{{ job.period }}<br>{{ job.place }}</div>
+          </div>
+          <ul style="margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:18px;">
+            <sc-for list="{{ job.points }}" as="pt" hint-placeholder-count="4">
+              <li style="display:grid; grid-template-columns:auto 1fr; gap:14px; font-size:16.5px; line-height:1.6; color:oklch(0.32 0.015 95);">
+                <span style="width:5px; height:5px; margin-top:9px; border-radius:50%; background:oklch(0.78 0.05 145);"></span>
+                <span style="text-wrap:pretty;"><strong style="font-weight:600; color:oklch(0.21 0.012 95);">{{ pt.label }}</strong>{{ pt.text }}</span>
+              </li>
+            </sc-for>
+          </ul>
+        </article>
+      </sc-for>
+    </div>
+  </section>
+
+  <section id="skills" style="padding:clamp(72px,9vw,110px) 0 0;">
+    <div style="border-top:1px solid oklch(0.89 0.008 95); font-family:'Geist Mono',ui-monospace,monospace; font-size:11.5px; letter-spacing:0.1em; text-transform:uppercase; color:oklch(0.45 0.02 95); padding-top:24px; margin-bottom:clamp(36px,5vw,60px);">Skills &amp; tools</div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:clamp(28px,4vw,44px);">
+      <sc-for list="{{ skillGroups }}" as="g" hint-placeholder-count="5">
+        <div style="display:flex; flex-direction:column; gap:20px;">
+          <h3 style="margin:0; font-size:15px; font-weight:600; letter-spacing:-0.005em;">{{ g.title }}</h3>
+          <sc-for list="{{ g.tiers }}" as="t" hint-placeholder-count="2">
+            <div>
+              <sc-if value="{{ t.label }}" hint-placeholder-val="{{ true }}">
+                <div style="font-family:'Geist Mono',ui-monospace,monospace; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; color:oklch(0.52 0.02 95); margin-bottom:10px;">{{ t.label }}</div>
+              </sc-if>
+              <div style="display:flex; flex-wrap:wrap; gap:7px;">
+                <sc-for list="{{ t.items }}" as="item" hint-placeholder-count="4">
+                  <span style="font-family:'Geist Mono',ui-monospace,monospace; font-size:12.5px; padding:6px 11px; border:1px solid oklch(0.87 0.01 95); border-radius:2px; color:oklch(0.3 0.015 95); background:oklch(0.985 0.004 95);">{{ item }}</span>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section id="education" style="padding:clamp(72px,9vw,110px) 0 0;">
+    <div style="border-top:1px solid oklch(0.89 0.008 95); font-family:'Geist Mono',ui-monospace,monospace; font-size:11.5px; letter-spacing:0.1em; text-transform:uppercase; color:oklch(0.45 0.02 95); padding-top:24px; margin-bottom:clamp(36px,5vw,60px);">Education</div>
+    <div style="display:flex; flex-direction:column; gap:clamp(36px,4vw,52px);">
+      <sc-for list="{{ education }}" as="ed" hint-placeholder-count="3">
+        <article style="display:grid; grid-template-columns:minmax(150px,0.42fr) minmax(0,1fr); gap:clamp(16px,3vw,48px);">
+          <div>
+            <div style="font-size:clamp(19px,1.8vw,23px); line-height:1.2; letter-spacing:-0.018em; font-weight:500;">{{ ed.title }}</div>
+            <div style="font-family:'Geist Mono',ui-monospace,monospace; font-size:11.5px; color:oklch(0.5 0.02 95); margin-top:9px; line-height:1.6;">{{ ed.period }}<br>{{ ed.school }}</div>
+          </div>
+          <ul style="margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:14px;">
+            <sc-for list="{{ ed.points }}" as="pt" hint-placeholder-count="2">
+              <li style="display:grid; grid-template-columns:auto 1fr; gap:14px; font-size:16.5px; line-height:1.6; color:oklch(0.32 0.015 95);">
+                <span style="width:5px; height:5px; margin-top:9px; border-radius:50%; background:oklch(0.78 0.05 145);"></span>
+                <span style="text-wrap:pretty;">{{ pt }}</span>
+              </li>
+            </sc-for>
+          </ul>
+        </article>
+      </sc-for>
+    </div>
+  </section>
+
+  <section id="languages" style="padding:clamp(72px,9vw,110px) 0 0;">
+    <div style="border-top:1px solid oklch(0.89 0.008 95); font-family:'Geist Mono',ui-monospace,monospace; font-size:11.5px; letter-spacing:0.1em; text-transform:uppercase; color:oklch(0.45 0.02 95); padding-top:24px; margin-bottom:clamp(36px,5vw,60px);">Languages</div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:clamp(24px,4vw,48px);">
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="font-size:clamp(24px,2.4vw,32px); letter-spacing:-0.022em; font-weight:500;">German</div>
+        <div style="font-size:16.5px; color:oklch(0.36 0.015 95);">Native language</div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="font-size:clamp(24px,2.4vw,32px); letter-spacing:-0.022em; font-weight:500;">English</div>
+        <div style="font-size:16.5px; color:oklch(0.36 0.015 95); text-wrap:pretty;">Business fluent — daily working language in international teams</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" style="padding:clamp(72px,9vw,110px) 0 0;">
+    <div style="border-top:1px solid oklch(0.89 0.008 95); padding-top:clamp(44px,6vw,72px); display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:36px;">
+      <div>
+        <h2 style="margin:0; font-size:clamp(30px,4.4vw,58px); line-height:1.05; letter-spacing:-0.028em; font-weight:400; max-width:640px; text-wrap:balance;">Looking for a software or solutions engineer to join the team?</h2>
+        <p style="margin:22px 0 0; font-size:17px; color:oklch(0.38 0.015 95);">Happy to talk. Zürich or remote.</p>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px; font-family:'Geist Mono',ui-monospace,monospace; font-size:13px;">
+        <a href="https://github.com/dominik.leimgruber" style="border-bottom:1px solid oklch(0.85 0.012 95); padding-bottom:6px;">github.com/dominik.leimgruber</a>
+        <a href="https://linkedin.com/in/dominik.leimgruber" style="border-bottom:1px solid oklch(0.85 0.012 95); padding-bottom:6px;">linkedin.com/in/dominik.leimgruber</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      jobs: [
+        {
+          company: "Swisscom Schweiz AG",
+          role: "DevOps / Platform Engineer",
+          period: "October 2023 – present",
+          place: "Zürich, ZH",
+          points: [
+            { label: "AWS platform engineering. ", text: "Development and operation of Swisscom's central AWS platform, used by more than 2'000 AWS accounts." },
+            { label: "Infrastructure as code. ", text: "Infrastructure automation with Terraform and AWS CDK; reusable modules that standardise the provisioning of new environments." },
+            { label: "Serverless & platform features. ", text: "Platform functionality built on Lambda, Step Functions, DynamoDB, EventBridge and many further services." },
+            { label: "AI-assisted engineering. ", text: "Agentic coding workflows and internal platform services connected through MCP servers; reusable agent skills that automate recurring operations and development tasks." },
+            { label: "Cloud architecture & governance. ", text: "Co-design of the target architecture for new platform services, contributing security and compliance requirements." }
+          ]
+        },
+        {
+          company: "Infoguard AG",
+          role: "Cyber Security Analyst",
+          period: "July 2021 – September 2023",
+          place: "Baar, ZG",
+          points: [
+            { label: "", text: "Analysis and triage of security incidents in the SOC using cyber defence sensors." },
+            { label: "", text: "Development and tuning of cyber defence use cases and sensors, reducing false positives." },
+            { label: "", text: "Vulnerability assessment and client advisory on prioritisation and remediation." },
+            { label: "", text: "Extension of internal correlation and automation tooling in Python." }
+          ]
+        },
+        {
+          company: "Supertrends AG",
+          role: "Software Developer",
+          period: "November 2020 – April 2021",
+          place: "Baar, ZG",
+          points: [
+            { label: "", text: "Further development of the company's internal WordPress application." },
+            { label: "", text: "Co-development of the backend application in Elixir." }
+          ]
+        }
+      ],
+      skillGroups: [
+        { title: "Cloud & platform", tiers: [
+          { label: "Excellent", items: ["AWS (Serverless, IAM, Landing Zone)", "Terraform", "AWS CDK", "Docker", "Git / CI-CD"] },
+          { label: "Good", items: ["Kubernetes", "Linux / UNIX"] }
+        ]},
+        { title: "AI & automation", tiers: [
+          { label: "", items: ["Agentic coding workflows", "MCP (Model Context Protocol)", "Custom agent skills", "Prompt engineering", "LLM-assisted process automation"] }
+        ]},
+        { title: "Software development", tiers: [
+          { label: "Excellent", items: ["Python", "Java", "TypeScript / JavaScript"] },
+          { label: "Good", items: ["Shell", "C#"] }
+        ]},
+        { title: "Frameworks & libraries", tiers: [
+          { label: "", items: ["Spring Boot", "React", "Vue.js"] }
+        ]},
+        { title: "Security", tiers: [
+          { label: "", items: ["Incident response & SOC analysis", "Vulnerability management", "Cloud security & governance"] }
+        ]}
+      ],
+      education: [
+        { title: "BSc Computer Science", period: "September 2019 – January 2023", school: "Hochschule Luzern", points: [
+          "Focus on IT operations & security and application development; Dean's List member.",
+          "Bachelor thesis: software-assisted governance assurance in Swisscom's Kubernetes clusters."
+        ]},
+        { title: "Berufsmaturität", period: "August 2018 – July 2019", school: "BBZ Olten", points: [
+          "Full-time, focus on engineering, architecture and life sciences — final grade 5.6."
+        ]},
+        { title: "Informatiker EFZ", period: "August 2014 – July 2018", school: "Avanade Schweiz GmbH", points: [
+          "Systems engineering specialisation — final grade 5.5."
+        ]}
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

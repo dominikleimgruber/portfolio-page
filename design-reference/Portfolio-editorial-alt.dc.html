@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,500;0,600;1,400&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:#f7f3ec; color:#211d1a; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; -webkit-font-smoothing:antialiased; }
+  a{ color:#7a2a24; text-decoration:none; }
+  a:hover{ color:#211d1a; }
+  ::selection{ background:#e8d5cf; }
+</style>
+</helmet>
+
+<div style="border-top:5px solid #7a2a24;">
+<div style="max-width:880px; margin:0 auto; padding:44px 30px 130px;">
+
+  <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:20px; padding-bottom:26px; border-bottom:1px solid #ddd4c6;">
+    <div>
+      <div style="font-family:Bitter,Georgia,serif; font-size:clamp(30px,4.4vw,44px); font-weight:600; letter-spacing:-0.02em; line-height:1.05;">Dominik Leimgruber</div>
+      <div style="font-family:'Geist Mono',ui-monospace,monospace; font-size:12.5px; letter-spacing:0.06em; text-transform:uppercase; color:#7a2a24; margin-top:12px;">DevOps &amp; Platform Engineer · Zürich</div>
+    </div>
+    <div style="display:flex; gap:20px; font-family:'Geist Mono',ui-monospace,monospace; font-size:12.5px;">
+      <a href="https://github.com/dominik.leimgruber" style="border-bottom:1px solid #d6b6ae; padding-bottom:3px;">GitHub</a>
+      <a href="https://linkedin.com/in/dominik.leimgruber" style="border-bottom:1px solid #d6b6ae; padding-bottom:3px;">LinkedIn</a>
+    </div>
+  </div>
+
+  <div style="margin-top:54px; display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:34px 52px;">
+    <p style="margin:0; font-family:Bitter,Georgia,serif; font-size:clamp(19px,2vw,24px); line-height:1.42; letter-spacing:-0.012em; color:#211d1a; text-wrap:pretty;">I work on Swisscom's central AWS platform — the landing zone, guardrails and self-service tooling that roughly 2'000 internal AWS accounts are built on.</p>
+    <div style="display:flex; flex-direction:column; gap:16px; font-size:16px; line-height:1.68; color:#3a352f;">
+      <p style="margin:0;">Most of it is Terraform, AWS CDK and serverless services, plus the operational side of keeping a platform that size predictable. Before that, two years in a SOC as a security analyst, and I started out as a software developer.</p>
+      <p style="margin:0;">That mix is why I like problems sitting between the engineering and the people using the thing. I'm looking for a software or solutions engineering role.</p>
+    </div>
+  </div>
+
+  <section style="margin-top:96px;">
+    <div style="display:flex; align-items:baseline; gap:14px; padding-bottom:12px; border-bottom:2px solid #211d1a;">
+      <span style="font-family:'Geist Mono',ui-monospace,monospace; font-size:12px; color:#7a2a24;">01</span>
+      <h2 style="margin:0; font-family:Bitter,Georgia,serif; font-size:19px; font-weight:600; letter-spacing:-0.01em;">Experience</h2>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:0;">
+      <sc-for list="{{ jobs }}" as="job" hint-placeholder-count="3">
+        <article style="padding:32px 0; border-bottom:1px solid #ddd4c6;">
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline; gap:6px 20px;">
+            <h3 style="margin:0; font-family:Bitter,Georgia,serif; font-size:20px; font-weight:500; letter-spacing:-0.012em;">{{ job.role }}<span style="color:#7a2a24;">, {{ job.company }}</span></h3>
+            <div style="font-family:'Geist Mono',ui-monospace,monospace; font-size:12px; color:#655e52; white-space:nowrap;">{{ job.period }}</div>
+          </div>
+          <ul style="margin:18px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:11px; max-width:660px;">
+            <sc-for list="{{ job.points }}" as="pt" hint-placeholder-count="4">
+              <li style="display:grid; grid-template-columns:18px 1fr; font-size:16px; line-height:1.62; color:#3a352f;">
+                <span style="color:#c08c84;">—</span>
+                <span style="text-wrap:pretty;">{{ pt }}</span>
+              </li>
+            </sc-for>
+          </ul>
+        </article>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="margin-top:80px;">
+    <div style="display:flex; align-items:baseline; gap:14px; padding-bottom:12px; border-bottom:2px solid #211d1a;">
+      <span style="font-family:'Geist Mono',ui-monospace,monospace; font-size:12px; color:#7a2a24;">02</span>
+      <h2 style="margin:0; font-family:Bitter,Georgia,serif; font-size:19px; font-weight:600; letter-spacing:-0.01em;">Skills</h2>
+    </div>
+    <div style="display:flex; flex-direction:column;">
+      <sc-for list="{{ skills }}" as="s" hint-placeholder-count="5">
+        <div style="display:grid; grid-template-columns:minmax(150px,0.32fr) minmax(0,1fr); gap:8px 28px; padding:20px 0; border-bottom:1px solid #ddd4c6; font-size:16px; line-height:1.62;">
+          <div style="font-family:Bitter,Georgia,serif; font-weight:500; color:#211d1a;">{{ s.title }}</div>
+          <div style="color:#3a352f; text-wrap:pretty;">{{ s.text }}</div>
+        </div>
+      </sc-for>
+    </div>
+    <p style="margin:24px 0 0; font-family:Bitter,Georgia,serif; font-style:italic; font-size:16px; line-height:1.6; color:#655e52; max-width:600px;">Strongest in AWS, Terraform, Python and TypeScript; working knowledge of Kubernetes, Shell and C#.</p>
+  </section>
+
+  <section style="margin-top:80px;">
+    <div style="display:flex; align-items:baseline; gap:14px; padding-bottom:12px; border-bottom:2px solid #211d1a;">
+      <span style="font-family:'Geist Mono',ui-monospace,monospace; font-size:12px; color:#7a2a24;">03</span>
+      <h2 style="margin:0; font-family:Bitter,Georgia,serif; font-size:19px; font-weight:600; letter-spacing:-0.01em;">Education</h2>
+    </div>
+    <div style="display:flex; flex-direction:column;">
+      <sc-for list="{{ education }}" as="ed" hint-placeholder-count="3">
+        <article style="padding:26px 0; border-bottom:1px solid #ddd4c6;">
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline; gap:6px 20px;">
+            <h3 style="margin:0; font-family:Bitter,Georgia,serif; font-size:19px; font-weight:500; letter-spacing:-0.012em;">{{ ed.title }}<span style="color:#7a2a24;">, {{ ed.school }}</span></h3>
+            <div style="font-family:'Geist Mono',ui-monospace,monospace; font-size:12px; color:#655e52; white-space:nowrap;">{{ ed.period }}</div>
+          </div>
+          <p style="margin:12px 0 0; font-size:16px; line-height:1.62; color:#3a352f; max-width:660px; text-wrap:pretty;">{{ ed.note }}</p>
+        </article>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="margin-top:80px;">
+    <div style="display:flex; align-items:baseline; gap:14px; padding-bottom:12px; border-bottom:2px solid #211d1a;">
+      <span style="font-family:'Geist Mono',ui-monospace,monospace; font-size:12px; color:#7a2a24;">04</span>
+      <h2 style="margin:0; font-family:Bitter,Georgia,serif; font-size:19px; font-weight:600; letter-spacing:-0.01em;">Languages</h2>
+    </div>
+    <div style="display:flex; flex-direction:column;">
+      <div style="display:grid; grid-template-columns:minmax(150px,0.32fr) minmax(0,1fr); gap:8px 28px; padding:20px 0; border-bottom:1px solid #ddd4c6; font-size:16px; line-height:1.62;">
+        <div style="font-family:Bitter,Georgia,serif; font-weight:500;">German</div>
+        <div style="color:#3a352f;">Native</div>
+      </div>
+      <div style="display:grid; grid-template-columns:minmax(150px,0.32fr) minmax(0,1fr); gap:8px 28px; padding:20px 0; border-bottom:1px solid #ddd4c6; font-size:16px; line-height:1.62;">
+        <div style="font-family:Bitter,Georgia,serif; font-weight:500;">English</div>
+        <div style="color:#3a352f; text-wrap:pretty;">Business fluent, daily working language in international teams</div>
+      </div>
+    </div>
+  </section>
+
+  <div style="margin-top:64px; display:flex; flex-wrap:wrap; justify-content:space-between; gap:16px; font-family:'Geist Mono',ui-monospace,monospace; font-size:12px; color:#655e52;">
+    <span>Zürich, Switzerland</span>
+    <span>Open to software &amp; solutions engineering roles</span>
+  </div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      jobs: [
+        { role: "DevOps / Platform Engineer", company: "Swisscom Schweiz AG", period: "Oct 2023 — now", points: [
+          "Development and operation of the central Swisscom AWS platform, used by over 2'000 AWS accounts.",
+          "Infrastructure automation with Terraform and AWS CDK, including reusable modules that standardise provisioning of new environments.",
+          "Platform features built on Lambda, Step Functions, DynamoDB, EventBridge and other services.",
+          "Agentic coding workflows and internal platform services exposed through MCP servers; reusable agent skills for recurring operations and development tasks.",
+          "Co-design of the target architecture for new platform services, contributing security and compliance requirements."
+        ]},
+        { role: "Cyber Security Analyst", company: "Infoguard AG", period: "Jul 2021 — Sep 2023", points: [
+          "Analysis and triage of security incidents in the SOC using cyber defence sensors.",
+          "Development and tuning of cyber defence use cases and sensors, reducing false positives.",
+          "Vulnerability assessment and client advisory on prioritisation and remediation.",
+          "Extension of internal correlation and automation tooling in Python."
+        ]},
+        { role: "Software Developer", company: "Supertrends AG", period: "Nov 2020 — Apr 2021", points: [
+          "Further development of the internal WordPress application.",
+          "Co-development of the backend application in Elixir."
+        ]}
+      ],
+      skills: [
+        { title: "Cloud & platform", text: "AWS (Serverless, IAM, Landing Zone), Terraform, AWS CDK, Docker, Git / CI-CD, Kubernetes, Linux / UNIX" },
+        { title: "AI & automation", text: "Agentic coding workflows, MCP integration of internal tools and services, custom agent skills, LLM-assisted process automation" },
+        { title: "Languages", text: "Python, Java, TypeScript / JavaScript, Shell, C#" },
+        { title: "Frameworks", text: "Spring Boot, React, Vue.js" },
+        { title: "Security", text: "Incident response and SOC analysis, vulnerability management, cloud security and governance" }
+      ],
+      education: [
+        { title: "BSc Computer Science", school: "Hochschule Luzern", period: "2019 — 2023", note: "Focus on IT operations, security and application development. Dean's List. Bachelor thesis on software-assisted governance assurance in Swisscom's Kubernetes clusters." },
+        { title: "Berufsmaturität", school: "BBZ Olten", period: "2018 — 2019", note: "Full-time, engineering and architecture focus. Final grade 5.6." },
+        { title: "Informatiker EFZ", school: "Avanade Schweiz GmbH", period: "2014 — 2018", note: "Systems engineering specialisation. Final grade 5.5." }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
