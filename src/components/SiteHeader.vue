@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import ThemeToggle from "./ThemeToggle.vue";
+</script>
 
 <template>
   <header class="site-header">
@@ -9,6 +11,7 @@
       <a href="#education">Education</a>
       <a href="#languages">Languages</a>
       <a href="#contact">Contact</a>
+      <ThemeToggle />
     </nav>
   </header>
 </template>

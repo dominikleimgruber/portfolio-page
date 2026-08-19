@@ -20,6 +20,56 @@
 
   --font-sans: "Bricolage Grotesque", system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: oklch(0.17 0.01 95);
+    --paper-translucent: oklch(0.17 0.01 95 / 0.85);
+    --card: oklch(0.23 0.012 95);
+    --ink: oklch(0.95 0.006 95);
+    --body: oklch(0.82 0.01 95);
+    --muted: oklch(0.75 0.012 95);
+    --meta: oklch(0.65 0.015 95);
+    --meta-dim: oklch(0.56 0.015 95);
+    --accent: oklch(0.72 0.14 145);
+    --accent-hover: oklch(0.76 0.14 145);
+    --accent-button-hover: oklch(0.62 0.14 145);
+    --accent-bright: oklch(0.78 0.17 145);
+    --accent-soft: oklch(0.5 0.09 145);
+    --selection: oklch(0.4 0.1 145);
+    --rule: oklch(0.32 0.012 95);
+    --border-strong: oklch(0.4 0.015 95);
+    --border-tag: oklch(0.34 0.012 95);
+    --border-link: oklch(0.36 0.014 95);
+
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --paper: oklch(0.17 0.01 95);
+  --paper-translucent: oklch(0.17 0.01 95 / 0.85);
+  --card: oklch(0.23 0.012 95);
+  --ink: oklch(0.95 0.006 95);
+  --body: oklch(0.82 0.01 95);
+  --muted: oklch(0.75 0.012 95);
+  --meta: oklch(0.65 0.015 95);
+  --meta-dim: oklch(0.56 0.015 95);
+  --accent: oklch(0.72 0.14 145);
+  --accent-hover: oklch(0.76 0.14 145);
+  --accent-button-hover: oklch(0.62 0.14 145);
+  --accent-bright: oklch(0.78 0.17 145);
+  --accent-soft: oklch(0.5 0.09 145);
+  --selection: oklch(0.4 0.1 145);
+  --rule: oklch(0.32 0.012 95);
+  --border-strong: oklch(0.4 0.015 95);
+  --border-tag: oklch(0.34 0.012 95);
+  --border-link: oklch(0.36 0.014 95);
+
+  color-scheme: dark;
 }
 
 *,
@@ -38,6 +88,13 @@ body {
   color: var(--body);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    transition: none;
+  }
 }
 
 ::selection {
@@ -100,6 +157,7 @@ p {
 .site-header__nav {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   justify-content: flex-end;
   gap: clamp(14px, 2.4vw, 30px);
   font-family: var(--font-mono);
@@ -108,6 +166,46 @@ p {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--meta);
+}
+
+.theme-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 40px;
+  height: 20px;
+  padding: 2px;
+  flex-shrink: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--card);
+  cursor: pointer;
+  transition: border-color 0.18s ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--ink);
+}
+
+.theme-toggle__knob {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  transition: transform 0.18s ease, background-color 0.18s ease, color 0.18s ease;
+}
+
+.theme-toggle[aria-checked="true"] .theme-toggle__knob {
+  transform: translateX(20px);
+}
+
+.theme-toggle__icon {
+  width: 10px;
+  height: 10px;
 }
 
 /* Sections */
@@ -185,16 +283,19 @@ p {
   letter-spacing: -0.032em;
   color: var(--ink);
   max-width: 960px;
-  text-wrap: balance;
 }
 
-.hero__heading-typed::after {
+.hero__heading-line {
+  display: block;
+}
+
+.hero__heading-line::after {
   content: "";
   display: none;
 }
 
-.hero__heading.is-typing .hero__heading-typed::after,
-.hero__heading.is-done .hero__heading-typed::after {
+.hero__heading.is-typing .hero__heading-line.is-active-line::after,
+.hero__heading.is-done .hero__heading-line.is-active-line::after {
   content: "";
   display: inline-block;
   width: 0.5ch;
@@ -216,7 +317,7 @@ p {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__heading-typed::after {
+  .hero__heading-line::after {
     display: none !important;
   }
 }
@@ -446,7 +547,7 @@ p {
   border: 1px solid var(--border-tag);
   border-radius: 2px;
   background: var(--card);
-  color: oklch(0.3 0.015 95);
+  color: var(--body);
 }
 
 /* Languages */
