@@ -1,6 +1,6 @@
 # Infra
 
-CDK app that deploys the AWS resources the portfolio site runs on, as two
+CDK app that deploys the AWS resources the portfolio site runs on, as three
 stacks in two different regions (see `bin/infra.ts`):
 
 - **`GlobalStack`** (us-east-1, not a choice) — the ACM certificate and the
@@ -11,9 +11,22 @@ stacks in two different regions (see `bin/infra.ts`):
   private S3 bucket (fixed name: `leimgruber.dev`) and the CloudFront
   distribution serving it, using the certificate from `GlobalStack` via a
   cross-region reference.
+- **`MonitoringStack`** (us-east-1, also not a choice) — a CloudWatch alarm on
+  CloudFront's request count, plus the SNS topic and email subscription it
+  notifies. CloudFront publishes metrics only to us-east-1, and an alarm can
+  only reference metrics in its own region, so it has to sit there. It's a
+  separate stack rather than part of `GlobalStack` because it consumes
+  `PortfolioStack`'s distribution ID, and `PortfolioStack` already depends on
+  `GlobalStack`'s certificate — combining them would be circular.
+
+  The alarm fires above 5,000 requests per 5 minutes (~16/s) against a baseline
+  of well under one per minute. It exists because the budget alert only reacts
+  once billing data catches up, which lags up to ~24h; this catches a traffic or
+  cost anomaly the same day. Missing data counts as not-breaching, since
+  CloudFront publishes no datapoints when the site is simply quiet.
 
 DNS for `leimgruber.dev` lives in **Cloudflare**, not Route 53 — there's no
-hosted zone in either stack. You manage the records there directly.
+hosted zone in any of them. You manage the records there directly.
 
 ## One-time setup (manual — see repo root README for the full checklist)
 
@@ -41,14 +54,18 @@ hosted zone in either stack. You manage the records there directly.
        resumes and finishes on its own once it validates.
    - **Leave that CNAME in Cloudflare permanently** — ACM re-checks it for
      auto-renewal indefinitely. Removing it later breaks renewal silently.
-   - `GlobalStack` deploys first (`PortfolioStack` depends on its
-     certificate output) — this ordering is automatic.
-5. Once the deploy finishes, take the `DistributionDomainName` output and
+   - Ordering is automatic and chained: `GlobalStack` (certificate) →
+     `PortfolioStack` (distribution) → `MonitoringStack` (alarm on that
+     distribution's metrics).
+5. Confirm the SNS subscription — AWS emails a "Confirm subscription" link
+   when `MonitoringStack` first deploys. Until it's clicked the alarm exists
+   but can't notify anyone.
+6. Once the deploy finishes, take the `DistributionDomainName` output and
    add it as a CNAME in Cloudflare for `leimgruber.dev` (apex CNAME
    flattening — Cloudflare handles a CNAME-like record at the zone root
    even though that's not normally allowed in DNS).
 
-After that, pushes to `main` that touch `infra/**` deploy both stacks
+After that, pushes to `main` that touch `infra/**` deploy all three stacks
 automatically via `.github/workflows/infra-deploy.yml`.
 
 ## Commands
@@ -61,8 +78,8 @@ expect AWS credentials for that account active in your shell.
 Or directly in this directory: `npm run synth`, `npm run diff`,
 `npm run deploy`, `npm run destroy` (with `CDK_DEPLOY_ACCOUNT` and
 `BUDGET_ALERT_EMAIL` exported). `deploy`/`destroy` run with `--all` since
-there are now two stacks — plain `cdk deploy`/`cdk destroy` with no stack
-name errors out asking which one you meant.
+there are three stacks — plain `cdk deploy`/`cdk destroy` with no stack name
+errors out asking which one you meant.
 
 `BUDGET_ALERT_EMAIL` is never hardcoded in source — this repo is public,
 and an email address doesn't belong in it. Locally it's an env var you
@@ -78,3 +95,7 @@ repo, secrets aren't).
 - `DistributionId` — the app repo's `CLOUDFRONT_DISTRIBUTION_ID` GitHub
   Actions variable, needed for cache invalidation after deploys.
 - `SiteUrl` — `https://leimgruber.dev`.
+
+## Outputs (MonitoringStack)
+
+- `AlertTopicArn` — the SNS topic the request-spike alarm publishes to.

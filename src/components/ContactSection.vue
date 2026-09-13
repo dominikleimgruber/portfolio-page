@@ -7,7 +7,7 @@
         <h2 class="contact__heading">
           Looking for a software or solutions engineer to join the team?
         </h2>
-        <p class="contact__note">Happy to talk. Zürich or remote.</p>
+        <p class="contact__note">Happy to talk. Zürich, Basel, Bern, Lucerne or remote.</p>
       </div>
       <div class="contact__links">
         <a href="https://github.com/dominik-leimgruber" target="_blank" rel="noreferrer"
