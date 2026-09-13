@@ -2,6 +2,7 @@
 import "source-map-support/register";
 import * as cdk from "aws-cdk-lib";
 import { GlobalStack } from "../lib/global-stack";
+import { MonitoringStack } from "../lib/monitoring-stack";
 import { PortfolioStack } from "../lib/portfolio-stack";
 
 const budgetAlertEmail = process.env.BUDGET_ALERT_EMAIL;
@@ -28,8 +29,18 @@ const globalStack = new GlobalStack(app, "GlobalStack", {
 
 // eu-central-2 (Zurich) is a choice, for data residency, and needs
 // `cdk bootstrap` run there too (in addition to us-east-1 for GlobalStack).
-new PortfolioStack(app, "PortfolioStack", {
+const portfolioStack = new PortfolioStack(app, "PortfolioStack", {
   env: { account, region: "eu-central-2" },
   crossRegionReferences: true,
   certificate: globalStack.certificate,
+});
+
+// Back in us-east-1, because that's the only region CloudFront publishes
+// metrics to — not a preference. Separate from GlobalStack because it
+// consumes PortfolioStack, which already depends on GlobalStack.
+new MonitoringStack(app, "MonitoringStack", {
+  env: { account, region: "us-east-1" },
+  crossRegionReferences: true,
+  distributionId: portfolioStack.distributionId,
+  alertEmail: budgetAlertEmail,
 });

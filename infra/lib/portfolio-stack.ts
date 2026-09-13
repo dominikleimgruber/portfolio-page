@@ -14,6 +14,9 @@ export interface PortfolioStackProps extends cdk.StackProps {
 }
 
 export class PortfolioStack extends cdk.Stack {
+  /** Consumed by MonitoringStack (us-east-1), where CloudFront's metrics live. */
+  public readonly distributionId: string;
+
   constructor(scope: Construct, id: string, props: PortfolioStackProps) {
     super(scope, id, props);
 
@@ -48,6 +51,8 @@ export class PortfolioStack extends cdk.Stack {
         { httpStatus: 404, responseHttpStatus: 200, responsePagePath: "/index.html" },
       ],
     });
+
+    this.distributionId = distribution.distributionId;
 
     new cdk.CfnOutput(this, "DistributionDomainName", {
       description:
