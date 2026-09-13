@@ -43,12 +43,14 @@ export class PortfolioStack extends cdk.Stack {
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
       },
-      // This is a single-page site (anchor navigation only, no client-side
-      // router), so these aren't required for routing — they just mean a
-      // stray/typo'd path renders the page instead of a bare S3 403/404.
+      // A stray or typo'd path renders the styled page rather than a bare S3
+      // XML error — but still answers 404, not 200. There's no client-side
+      // router here, so any path other than / and /assets/* genuinely isn't
+      // found, and scanners probing for /.env and friends shouldn't get a
+      // success response telling them the host is worth revisiting.
       errorResponses: [
-        { httpStatus: 403, responseHttpStatus: 200, responsePagePath: "/index.html" },
-        { httpStatus: 404, responseHttpStatus: 200, responsePagePath: "/index.html" },
+        { httpStatus: 403, responseHttpStatus: 404, responsePagePath: "/index.html" },
+        { httpStatus: 404, responseHttpStatus: 404, responsePagePath: "/index.html" },
       ],
     });
 
