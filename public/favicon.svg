@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <style>
+    .bg { fill: #2f2c27; }
+    .fg { fill: #f9f8f5; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #f9f8f5; }
+      .fg { fill: #2f2c27; }
+    }
+  </style>
+  <rect class="bg" width="100" height="100" rx="8"/>
+  <path class="fg" fill-rule="evenodd"
+        d="M15,26 H31 A24,24 0 0 1 31,74 H15 Z
+           M27,38 H31 A12,12 0 0 1 31,62 H27 Z"/>
+  <path class="fg" d="M63,26 H75 V62 H85 V74 H63 Z"/>
+</svg>
