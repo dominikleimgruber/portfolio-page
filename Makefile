@@ -1,6 +1,8 @@
-S3_BUCKET_NAME ?=
-AWS_REGION ?=
-AWS_ACCOUNT_ID ?=
+S3_BUCKET_NAME ?= leimgruber.dev
+AWS_REGION ?= eu-central-2
+AWS_ACCOUNT_ID ?= 255572710732
+BUDGET_ALERT_EMAIL ?=
+CLOUDFRONT_DISTRIBUTION_ID ?=
 
 .PHONY: install dev build preview deploy clean \
 	infra-install infra-synth infra-diff infra-deploy infra-destroy
@@ -23,18 +25,30 @@ build:
 preview: build
 	npm run preview
 
-## Build and sync dist/ to the S3 bucket (requires S3_BUCKET_NAME, AWS credentials)
+## Build, sync dist/ to S3, and invalidate the CloudFront cache.
+## Pass CLOUDFRONT_DISTRIBUTION_ID to invalidate; without it the sync still
+## runs but visitors keep seeing the cached version until the TTL expires.
 deploy: build
 	aws s3 sync dist/ "s3://$(S3_BUCKET_NAME)" --delete --region $(AWS_REGION)
+	@if [ -n "$(CLOUDFRONT_DISTRIBUTION_ID)" ]; then \
+		echo "Invalidating CloudFront cache..."; \
+		aws cloudfront create-invalidation \
+			--distribution-id "$(CLOUDFRONT_DISTRIBUTION_ID)" \
+			--paths "/*"; \
+	else \
+		echo "CLOUDFRONT_DISTRIBUTION_ID not set - skipping cache invalidation."; \
+	fi
 
 ## Remove local app build artifacts and dependencies
 clean:
 	rm -rf dist node_modules
 
-## --- Infra (CDK: hosted zone, CloudFront, S3 bucket) ---
-## All targets below require AWS_ACCOUNT_ID (the account to deploy into,
-## e.g. `make infra-deploy AWS_ACCOUNT_ID=123456789012`) and AWS credentials
-## for that account active in your shell.
+## --- Infra (CDK: ACM cert + budget in us-east-1, CloudFront + S3 in eu-central-2) ---
+## All targets below require BUDGET_ALERT_EMAIL (e.g.
+## `make infra-deploy BUDGET_ALERT_EMAIL=you@example.com`) and AWS
+## credentials for the account active in your shell.
+
+INFRA_ENV := CDK_DEPLOY_ACCOUNT=$(AWS_ACCOUNT_ID) BUDGET_ALERT_EMAIL=$(BUDGET_ALERT_EMAIL)
 
 ## Install infra dependencies
 infra-install:
@@ -42,16 +56,16 @@ infra-install:
 
 ## Preview the CloudFormation template
 infra-synth:
-	cd infra && CDK_DEPLOY_ACCOUNT=$(AWS_ACCOUNT_ID) npm run synth
+	cd infra && $(INFRA_ENV) npm run synth
 
 ## Show what would change against the deployed stack
 infra-diff:
-	cd infra && CDK_DEPLOY_ACCOUNT=$(AWS_ACCOUNT_ID) npm run diff
+	cd infra && $(INFRA_ENV) npm run diff
 
-## Deploy/update the stack (hosted zone, cert, CloudFront, S3 bucket)
+## Deploy/update both stacks (cert, budget, CloudFront, S3 bucket)
 infra-deploy:
-	cd infra && CDK_DEPLOY_ACCOUNT=$(AWS_ACCOUNT_ID) npm run deploy
+	cd infra && $(INFRA_ENV) npm run deploy
 
-## Tear down the stack (careful: deletes the hosted zone and bucket)
+## Tear down both stacks (careful: deletes the bucket and its contents)
 infra-destroy:
-	cd infra && CDK_DEPLOY_ACCOUNT=$(AWS_ACCOUNT_ID) npm run destroy
+	cd infra && $(INFRA_ENV) npm run destroy

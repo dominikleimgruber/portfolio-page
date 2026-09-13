@@ -19,9 +19,14 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     # Explicit, not inferred from whatever the runner's credentials resolve
-    # to — this is the one place the target AWS account is defined.
+    # to — this is the one place the target AWS account is defined. Not a
+    # secret: account IDs aren't sensitive on their own (see role trust
+    # policy for what actually restricts access).
     env:
-      CDK_DEPLOY_ACCOUNT: ${{ vars.AWS_ACCOUNT_ID }}
+      CDK_DEPLOY_ACCOUNT: "255572710732"
+      # A secret, not a repo variable, since this repo is public and vars
+      # are world-readable — an email address doesn't belong there.
+      BUDGET_ALERT_EMAIL: ${{ secrets.BUDGET_ALERT_EMAIL }}
     defaults:
       run:
         working-directory: infra
@@ -45,11 +50,12 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ vars.AWS_INFRA_ROLE_ARN }}
-          # CDK CLI needs a region to talk to STS/CloudFormation with; the
-          # stack itself is pinned to us-east-1 in bin/infra.ts regardless
-          # (CloudFront's certificate requirement, not a deploy choice).
+          role-to-assume: arn:aws:iam::255572710732:role/github-actions-infra-deploy
+          # This is just the region the CLI talks to STS/CloudFormation
+          # through — the app deploys two stacks to two fixed regions of
+          # their own regardless (GlobalStack: us-east-1, PortfolioStack:
+          # eu-central-2 — see bin/infra.ts).
           aws-region: us-east-1
 
-      - name: Deploy stack
-        run: npx cdk deploy --require-approval never
+      - name: Deploy stacks
+        run: npx cdk deploy --all --require-approval never

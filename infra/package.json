@@ -9,8 +9,8 @@
     "build": "tsc --noEmit",
     "synth": "cdk synth",
     "diff": "cdk diff",
-    "deploy": "cdk deploy",
-    "destroy": "cdk destroy"
+    "deploy": "cdk deploy --all",
+    "destroy": "cdk destroy --all"
   },
   "devDependencies": {
     "@types/node": "^26.2.0",

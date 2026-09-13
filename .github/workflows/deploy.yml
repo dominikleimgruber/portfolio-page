@@ -37,11 +37,14 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
-          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: arn:aws:iam::255572710732:role/github-actions-app-deploy
+          # Matches where the S3 bucket actually lives (PortfolioStack,
+          # eu-central-2) — CloudFront invalidation itself isn't
+          # region-sensitive, but the S3 sync needs the right one.
+          aws-region: eu-central-2
 
       - name: Sync to S3
-        run: aws s3 sync dist/ "s3://${{ vars.S3_BUCKET_NAME }}" --delete
+        run: aws s3 sync dist/ "s3://leimgruber.dev" --delete
 
       - name: Invalidate CloudFront cache
         run: |
