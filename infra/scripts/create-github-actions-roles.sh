@@ -8,13 +8,22 @@
 #   - AWS credentials for account 255572710732 active in this shell
 #     (e.g. `assume <profile>` if you're using granted.dev).
 #
-# Safe to re-run: skips a role if it already exists rather than failing.
+# Safe to re-run: creates roles if missing, and always re-applies the trust
+# and permission policies so fixes to either take effect on re-run.
 
 set -euo pipefail
 
 ACCOUNT_ID="255572710732"
-GITHUB_REPO="dominikleimgruber/portfolio-page"
 BUCKET_NAME="leimgruber.dev"
+
+# This repo has GitHub's immutable subject claims enabled, so the token's
+# `sub` embeds the numeric owner and repo IDs rather than their names:
+#   repo:<owner>@<owner_id>/<repo>@<repo_id>:ref:refs/heads/main
+# That's deliberate — it survives renames, and a released username can't be
+# re-registered by someone else to impersonate this repo. Verify with:
+#   gh api /repos/dominikleimgruber/portfolio-page/actions/oidc/customization/sub
+GITHUB_REPO="dominikleimgruber/portfolio-page"
+GITHUB_SUB_PREFIX="repo:dominikleimgruber@56133959/portfolio-page@1338808976"
 
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
@@ -41,7 +50,7 @@ cat > "$TMP_DIR/trust-policy.json" <<EOF
           "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
         },
         "StringLike": {
-          "token.actions.githubusercontent.com:sub": "repo:${GITHUB_REPO}:ref:refs/heads/main"
+          "token.actions.githubusercontent.com:sub": "${GITHUB_SUB_PREFIX}:ref:refs/heads/main"
         }
       }
     }
@@ -49,10 +58,13 @@ cat > "$TMP_DIR/trust-policy.json" <<EOF
 }
 EOF
 
-create_role_if_missing() {
+upsert_role() {
   local role_name="$1"
   if aws iam get-role --role-name "$role_name" >/dev/null 2>&1; then
-    echo "Role $role_name already exists, skipping create-role."
+    echo "Role $role_name exists - updating trust policy..."
+    aws iam update-assume-role-policy \
+      --role-name "$role_name" \
+      --policy-document "file://$TMP_DIR/trust-policy.json"
   else
     echo "Creating role $role_name..."
     aws iam create-role \
@@ -64,7 +76,7 @@ create_role_if_missing() {
 }
 
 # --- infra-deploy: only allowed to assume the CDK bootstrap roles ---
-create_role_if_missing "github-actions-infra-deploy"
+upsert_role "github-actions-infra-deploy"
 
 cat > "$TMP_DIR/infra-deploy-policy.json" <<EOF
 {
@@ -87,7 +99,7 @@ aws iam put-role-policy \
   --policy-document "file://$TMP_DIR/infra-deploy-policy.json"
 
 # --- app-deploy: S3 sync + CloudFront invalidation ---
-create_role_if_missing "github-actions-app-deploy"
+upsert_role "github-actions-app-deploy"
 
 cat > "$TMP_DIR/app-deploy-policy.json" <<EOF
 {
