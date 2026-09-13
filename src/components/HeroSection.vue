@@ -49,7 +49,7 @@ const isTypingLine1 = computed(() => displayText.value.length <= LINE_1.length);
     <div class="hero__buttons">
       <a
         class="button button--primary"
-        href="https://github.com/dominik.leimgruber"
+        href="https://github.com/dominikleimgruber"
         target="_blank"
         rel="noreferrer"
         >GitHub</a
