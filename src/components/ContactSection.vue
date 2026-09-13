@@ -5,7 +5,7 @@
     <div class="contact">
       <div class="contact__intro">
         <h2 class="contact__heading">
-          Looking for a software or solutions engineer to join the team?
+          Looking for a software, solutions or AI engineer to join the team?
         </h2>
         <p class="contact__note">Happy to talk. Zürich, Basel, Bern, Lucerne or remote.</p>
       </div>

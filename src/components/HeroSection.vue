@@ -21,7 +21,7 @@ const isTypingLine1 = computed(() => displayText.value.length <= LINE_1.length);
   <section class="hero" id="top">
     <p class="hero__availability">
       <span class="hero__dot" aria-hidden="true"></span>
-      Open to software &amp; solutions engineering roles
+      Open to software, solutions &amp; AI engineering roles
     </p>
     <h1
       class="hero__heading"
