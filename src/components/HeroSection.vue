@@ -56,7 +56,7 @@ const isTypingLine1 = computed(() => displayText.value.length <= LINE_1.length);
       >
       <a
         class="button button--secondary"
-        href="https://linkedin.com/in/dominik.leimgruber"
+        href="https://linkedin.com/in/dominik-leimgruber"
         target="_blank"
         rel="noreferrer"
         >LinkedIn</a
