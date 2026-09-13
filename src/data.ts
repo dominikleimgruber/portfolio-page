@@ -32,7 +32,7 @@ export const jobs: Job[] = [
     points: [
       {
         label: "AWS platform engineering.",
-        text: "Development and operation of Swisscom's central AWS platform, used by more than 2'000 AWS accounts.",
+        text: "Development and operation of Swisscom's central AWS platform, a large-scale multi-account environment.",
       },
       {
         label: "Infrastructure as code.",

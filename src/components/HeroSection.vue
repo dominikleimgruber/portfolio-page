@@ -38,7 +38,7 @@ const isTypingLine1 = computed(() => displayText.value.length <= LINE_1.length);
       </span>
     </h1>
     <p class="hero__subheading">
-      Building the AWS foundation that 2'000+ accounts run on.
+      Building the AWS foundation behind a large-scale multi-account platform.
     </p>
     <p class="hero__paragraph">
       Five years across cloud platform engineering, security operations and
