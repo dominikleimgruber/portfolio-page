@@ -10,10 +10,10 @@
         <p class="contact__note">Happy to talk. Zürich or remote.</p>
       </div>
       <div class="contact__links">
-        <a href="https://github.com/dominik.leimgruber" target="_blank" rel="noreferrer"
+        <a href="https://github.com/dominik-leimgruber" target="_blank" rel="noreferrer"
           >github.com/dominik.leimgruber</a
         >
-        <a href="https://linkedin.com/in/dominik.leimgruber" target="_blank" rel="noreferrer"
+        <a href="https://linkedin.com/in/dominik-leimgruber" target="_blank" rel="noreferrer"
           >linkedin.com/in/dominik.leimgruber</a
         >
       </div>
